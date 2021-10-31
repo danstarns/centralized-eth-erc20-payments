@@ -1,0 +1,6 @@
+{
+  "scripts": {
+    "docker-dev": "docker-compose -f ./docker-compose.yaml -f docker-compose-neo4j.yaml -f docker-compose-redis.yaml up --build",
+    "docker-test": "docker-compose -f ./docker-compose-test.yaml -f docker-compose-neo4j.yaml up --build --abort-on-container-exit"
+  }
+}

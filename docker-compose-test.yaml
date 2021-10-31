@@ -1,0 +1,24 @@
+version: "2.0"
+
+services:
+  api:
+    build:
+      context: ./services/api
+      dockerfile: Dockerfile.test
+    environment:
+      - DEBUG=API:*
+      - SERVER_PORT=4000
+      - NEO4J_URL=neo4j://neo4j:7687
+      - NEO4J_USER=neo4j
+      - NEO4J_PASSWORD=test
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - FORWARDER_QUEUE=forwarder
+      - FORWARDER_DB=0
+      - WITHDRAWER_QUEUE=withdrawer
+      - WITHDRAWER_DB=1
+    ports:
+      - 4000:4000
+    depends_on:
+      neo4j:
+        condition: service_healthy

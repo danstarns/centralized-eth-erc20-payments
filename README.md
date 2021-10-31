@@ -46,15 +46,17 @@ High level overview of whats stored in [Neo4j]():
 
 ## Development
 
-For starting services manually check each services README.md. Otherwize use Docker 🐳:
+For starting services manually check each services README.md. Otherwise use Docker 🐳:
 
 ```bash
-docker-compose up
+npm run docker-dev
 ```
 
 ## Testing
 
-Oh no, no tests yet :P
+```bash
+npm run docker-test
+```
 
 ## Licence
 

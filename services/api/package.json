@@ -5,11 +5,13 @@
   "main": "./dis/index.js",
   "scripts": {
     "start": "cross-env node ./src/index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest --forceExit"
   },
   "author": "danielstarns@hotmail.com",
   "license": "MIT",
   "dependencies": {
+    "@neo4j/graphql-ogm": "^2.3.0",
+    "body-parser": "^1.19.0",
     "bull": "^4.1.0",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
@@ -19,6 +21,9 @@
   "devDependencies": {
     "cross-env": "^7.0.3",
     "debug": "^4.3.2",
-    "env.gql": "^1.0.0"
+    "env.gql": "^1.0.0",
+    "jest": "^27.3.1",
+    "superagent": "^6.1.0",
+    "supertest": "^6.1.6"
   }
 }
