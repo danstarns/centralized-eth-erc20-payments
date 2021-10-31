@@ -29,7 +29,7 @@ The project consists of following Node.js services deployed independently:
 1. [API]() - User facing REST, handles account creation and withdrawal requests.
 2. [Deployer]() - Listens for account creation and deploys the [Forwarder]() contract and associates the deployed contract with the new User.
 3. [Withdrawer]() - Listens for withdrawal requests and facilitates the transaction.
-4. [Watcher]() - Watches transactions incoming to the 'Master Wallet', reconciles the sender address to an associated User's Forwarder contract and updates users balance.
+4. [Watcher]() - Watches for the [USDT Transfer](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC20/IERC20.sol#L75) event where the `to` address is the 'Master Wallet' and reconciles, via a Forwarder, the sender to an associated user.
 
 ## Dependencies
 
