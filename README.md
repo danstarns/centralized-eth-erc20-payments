@@ -43,3 +43,19 @@ This project uses the following:
 High level overview of whats stored in [Neo4j]():
 
 ![Tux, the Linux mascot](./docs/images/data-model.png)
+
+## Development
+
+For starting services manually check each services README.md. Otherwize use Docker 🐳:
+
+```bash
+docker-compose up
+```
+
+## Testing
+
+Oh no, no tests yet :P
+
+## Licence
+
+MIT Daniel Starns danielstarns@hotmail.com
