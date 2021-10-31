@@ -37,3 +37,9 @@ This project uses the following:
 
 1. [Neo4j]() - For account storage, keeping track of deposits and withdrawals and use to query and aggregate the users total balance.
 2. [Redis]() - Used as a queue for handling the Deployment of each users [Forwarder]() contract and each withdrawal request.
+
+## Data Model
+
+High level overview of whats stored in [Neo4j]():
+
+![Tux, the Linux mascot](./docs/images/data-model.png)
