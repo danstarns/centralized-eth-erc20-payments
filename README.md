@@ -37,6 +37,7 @@ This project uses the following:
 
 1. [Neo4j]() - For account storage, keeping track of deposits and withdrawals and use to query and aggregate the users total balance.
 2. [Redis]() - Used as a queue for handling the Deployment of each users [Forwarder]() contract and each withdrawal request.
+3. [Ganache]() - Used as a development blockchain for testing
 
 ## Data Model
 
