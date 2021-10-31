@@ -20,7 +20,7 @@ When the [Forwarder]() contract is deployed the user will be able to query for t
 
 ### Withdrawals
 
-When a user requests a withdrawal a 'Withdrawal Request' is placed on the [Withdrawer]() queue. The Withdrawer queue shall listen for withdrawal requests and wil facilitate the transaction & update the users balance.
+When a user requests a withdrawal a 'Withdrawal Request' is placed on the [Withdrawer]() queue. The Withdrawer queue shall listen for withdrawal requests and shall facilitate the transaction plus update the users balance.
 
 ## Services
 
