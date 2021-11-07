@@ -1,6 +1,6 @@
-# centralized-eth-payments
+# centralized-eth-erc20-payments
 
-Centralized Ethereum Payment Processor
+Centralized Ethereum ERC20 Payment Processor
 
 ## What is it ?
 
@@ -12,24 +12,24 @@ Ever wondered how crypto exchanges manage deposits and withdrawals ? This projec
 
 ### Account Creation
 
-When a user creates an account, a message is placed onto the [Deployer]() queue, the Deployer will create a [Forwarder]() contract associated with that User. The [Forwarder]() is designed to accept ERC20 USDT token and forward the deposited funds onto a specified 'Master Wallet'.
+When a user creates an account, a message is placed onto the [Receiver]() queue, the Receiver will create a [Receiver]() contract associated with that User. The [Receiver]() is designed to accept [ERC20 USDT](https://tether.to/) token. Each Receiver contract is a child of/created by the [Bank Contract]().
 
 ### Deposits
 
-When the [Forwarder]() contract is deployed the user will be able to query for there deposit address and deposit funds. The [Watcher]() watches forwarded transactions incoming to the 'Master Wallet', reconciles the sender address to an associated user and updates users balance.
+When the [Receiver]() contract is deployed the user will be able to query for there deposit address and deposit funds. The [Watcher]() watches the logs for the [ERC20 USDT](https://tether.to/) token, reconciles the sender address to an associated Receiver contract and then is able to relate a deposit to a user, thus updating the users balance.
 
 ### Withdrawals
 
-When a user requests a withdrawal a 'Withdrawal Request' is placed on the [Withdrawer]() queue. The Withdrawer queue shall listen for withdrawal requests and shall facilitate the transaction plus update the users balance.
+When a user requests a withdrawal a 'Withdrawal Request' is placed on the [Withdrawer]() queue. The Withdrawer shall and shall facilitate the transaction plus append a deposit against the User.
 
 ## Services
 
 The project consists of following Node.js services deployed independently:
 
 1. [API]() - User facing REST, handles account creation and withdrawal requests.
-2. [Deployer]() - Listens for account creation and deploys the [Forwarder]() contract and associates the deployed contract with the new User.
+2. [Receiver]() - Listens for account creation and deploys the [Receiver]() contract and associates the deployed contract with the new User.
 3. [Withdrawer]() - Listens for withdrawal requests and facilitates the transaction.
-4. [Watcher]() - Watches for the [USDT Transfer](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC20/IERC20.sol#L75) event where the `to` address is the 'Master Wallet' and reconciles, via a Forwarder, the sender to an associated user.
+4. [Watcher]() - Watches the [USDT Transfer](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC20/IERC20.sol#L75) logs and records a deposit if the 'to' address is one belonging to a User.
 
 ## Dependencies
 
@@ -43,7 +43,7 @@ This project uses the following:
 
 High level overview of whats stored in [Neo4j]():
 
-![Tux, the Linux mascot](./docs/images/data-model.png)
+![Data Model](./docs/images/data-model.png)
 
 ## Development
 
@@ -59,6 +59,6 @@ npm run docker-dev
 npm run docker-test
 ```
 
-## Licence
+## License
 
 MIT Daniel Starns danielstarns@hotmail.com
