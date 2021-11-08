@@ -1,0 +1,17 @@
+FROM node:16-alpine
+
+WORKDIR /app
+
+COPY ./services/api/package*.json /app/services/api/
+RUN cd ./services/api && npm install && cd ../../
+COPY services/api/ /app/services/api/
+
+COPY contracts/package*.json /app/contracts/
+COPY contracts/truffle-config.js /app/contracts/
+COPY contracts/contracts/ /app/contracts/contracts/
+RUN cd ./contracts && npm install && cd ../
+COPY contracts/ /app/contracts/
+
+COPY ./package.json .
+
+CMD ["npm", "test"]

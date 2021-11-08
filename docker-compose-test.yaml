@@ -1,9 +1,9 @@
 version: "2.0"
 
 services:
-  api:
+  test:
     build:
-      context: ./services/api
+      context: .
       dockerfile: Dockerfile.test
     environment:
       - DEBUG=API:*
