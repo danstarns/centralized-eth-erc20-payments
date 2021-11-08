@@ -12,11 +12,11 @@ Ever wondered how crypto exchanges manage deposits and withdrawals ? This projec
 
 ### Account Creation
 
-When a user creates an account, a message is placed onto the [Receiver]() queue, the Receiver will create a [Receiver]() contract associated with that User. The [Receiver]() is designed to accept [ERC20 USDT](https://tether.to/) token. Each Receiver contract is a child of/created by the [Bank Contract]().
+When a user creates an account, a message is placed onto the [Receiver queue](), the queue listener will create a [Receiver Contract](./contracts/contracts/Receiver.sol) associated with that User. Each Receiver is designed to accept [ERC20 USDT](https://tether.to/) token and is a child of/created by the [Bank Contract](./contracts/contracts/Bank.sol).
 
 ### Deposits
 
-When the [Receiver]() contract is deployed the user will be able to query for there deposit address and deposit funds. The [Watcher]() watches the logs for the [ERC20 USDT](https://tether.to/) token, reconciles the sender address to an associated Receiver contract and then is able to relate a deposit to a user, thus updating the users balance.
+When the [Receiver Contract](./contracts/contracts/Receiver.sol) is deployed the user will be able to query for there deposit address and deposit funds. The [Watcher]() watches the logs for the [ERC20 USDT](https://tether.to/) token, reconciles the sender address to an associated Receiver contract and then is able to relate a deposit to a user, thus updating the users balance.
 
 ### Withdrawals
 
@@ -27,7 +27,7 @@ When a user requests a withdrawal a 'Withdrawal Request' is placed on the [Withd
 The project consists of following Node.js services deployed independently:
 
 1. [API]() - User facing REST, handles account creation and withdrawal requests.
-2. [Receiver]() - Listens for account creation and deploys the [Receiver]() contract and associates the deployed contract with the new User.
+2. [Receiver]() - Listens for account creation and deploys the [Receiver Contract](./contracts/contracts/Receiver.sol) and associates the deployed contract with the new User.
 3. [Withdrawer]() - Listens for withdrawal requests and facilitates the transaction.
 4. [Watcher]() - Watches the [USDT Transfer](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC20/IERC20.sol#L75) logs and records a deposit if the 'to' address is one belonging to a User.
 
