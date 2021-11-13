@@ -1,5 +1,5 @@
+require("express-async-errors");
 const express = require("express");
-const bodyParser = require("body-parser");
 const debug = require("./debug")("Server");
 const routes = require("./routes");
 const { SERVER_PORT } = require("./config");
@@ -7,6 +7,10 @@ const { SERVER_PORT } = require("./config");
 const app = express();
 app.use(express.json());
 app.post("/signup", routes.signup);
+app.use((error, req, res, next) => {
+  res.status(500);
+  res.send({ error: error.message });
+});
 
 async function start() {
   debug(`Starting on port: ${SERVER_PORT}`);

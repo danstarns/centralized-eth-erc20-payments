@@ -1,0 +1,25 @@
+{
+  "name": "receiver",
+  "version": "1.0.0",
+  "description": "Listens for account creation and deploys the Receiver Contract and associates the deployed contract with the new User.",
+  "main": "./src/index.js",
+  "scripts": {
+    "start": "cross-env node ./src/index.js"
+  },
+  "author": "danielstarns@hotmail.com",
+  "license": "MIT",
+  "dependencies": {
+    "@neo4j/graphql-ogm": "^2.3.0",
+    "bull": "^4.1.0",
+    "dotenv": "^10.0.0",
+    "ethereumjs-tx": "^2.1.2",
+    "ioredis": "^4.28.0",
+    "neo4j-driver": "^4.3.4",
+    "web3": "^1.6.0"
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.3",
+    "debug": "^4.3.2",
+    "env.gql": "^1.0.0"
+  }
+}

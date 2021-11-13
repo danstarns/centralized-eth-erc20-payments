@@ -12,10 +12,10 @@ services:
       - NEO4J_PASSWORD=test
       - REDIS_HOST=redis
       - REDIS_PORT=6379
-      - FORWARDER_QUEUE=forwarder
-      - FORWARDER_DB=0
-      - WITHDRAWER_QUEUE=withdrawer
-      - WITHDRAWER_DB=1
+      - REDIS_RECEIVER_DEPLOY_QUEUE=forwarder
+      - REDIS_RECEIVER_DB=0
+      - REDIS_WITHDRAWER_QUEUE=withdrawer
+      - REDIS_WITHDRAWER_DB=1
     ports:
       - 4000:4000
     depends_on:
