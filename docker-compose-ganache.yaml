@@ -15,3 +15,5 @@ services:
       - --quiet
       - --account="${ACCOUNT_ONE_PRIVATE_KEY_HEX},99999999999999999999"
       - --account="${ACCOUNT_TWO_PRIVATE_KEY_HEX},99999999999999999999"
+      - --allowUnlimitedContractSize
+      - --l=8000000

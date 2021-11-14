@@ -34,10 +34,9 @@ contract Bank {
         address tokenAddress,
         address receiverAddress,
         address toAddress
-    ) public onlyOwner returns (bool) {
+    ) public onlyOwner {
         Receiver receiver = Receiver(receiverAddress);
         receiver.withdrawTokensTo(tokenAddress, toAddress);
-        return true;
     }
 
     function getTotalBalance(address tokenAddress)

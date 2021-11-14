@@ -15,6 +15,7 @@
     "ethereumjs-tx": "^2.1.2",
     "ioredis": "^4.28.0",
     "neo4j-driver": "^4.3.4",
+    "solc": "^0.8.10",
     "web3": "^1.6.0"
   },
   "devDependencies": {
