@@ -1,21 +1,16 @@
 version: "2.0"
 
 services:
-  api:
+  centralized-eth-erc20-payments:
     build:
-      context: ./services/api
+      context: .
     environment:
-      - DEBUG=API:*
       - SERVER_PORT=4000
       - NEO4J_URL=neo4j://neo4j:7687
       - NEO4J_USER=neo4j
       - NEO4J_PASSWORD=test
       - REDIS_HOST=redis
       - REDIS_PORT=6379
-      - REDIS_RECEIVER_DEPLOY_QUEUE=forwarder
-      - REDIS_RECEIVER_DB=0
-      - REDIS_WITHDRAWER_QUEUE=withdrawer
-      - REDIS_WITHDRAWER_DB=1
     ports:
       - 4000:4000
     depends_on:

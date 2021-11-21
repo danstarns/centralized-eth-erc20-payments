@@ -1,9 +1,38 @@
 {
+  "name": "centralized-eth-erc20-payments",
+  "repository": "https://github.com/danstarns/centralized-eth-erc20-payments",
+  "author": "danielstarns@hotmail.com",
   "scripts": {
-    "test": "cd ./contracts && npm run test && cd ../services/api && npm run test",
-    "docker-dev": "docker-compose -f ./docker-compose.yaml -f docker-compose-neo4j.yaml -f docker-compose-redis.yaml -f docker-compose-ganache.yaml --env-file ./.env.ganache.test up --build",
-    "docker-test": "docker-compose -f ./docker-compose-test.yaml -f docker-compose-neo4j.yaml -f docker-compose-redis.yaml -f docker-compose-ganache.yaml --env-file ./.env.ganache.test up --build --abort-on-container-exit",
+    "test-api": "jest --forceExit",
+    "test-contracts": "truffle test",
+    "dev-deploy": "node ./src/contracts/dev-deploy",
+    "start": "node ./src/index.js",
+    "test": "npm run test-contracts && npm run test-api",
+    "docker-dev": "docker-compose -f ./docker-compose.yaml -f docker-compose-neo4j.yaml -f docker-compose-redis.yaml -f docker-compose-ganache.yaml --env-file ./.env up --build",
+    "docker-test": "docker-compose -f ./docker-compose-test.yaml -f docker-compose-neo4j.yaml -f docker-compose-redis.yaml -f docker-compose-ganache.yaml --env-file ./.env up --build --abort-on-container-exit",
     "install-all": "cd ./contracts && npm install && cd ../services/api && npm install && cd ../receiver && npm run install",
-    "docker-ganache": "docker-compose -f docker-compose-ganache.yaml --env-file ./.env.ganache.test up --build"
+    "docker-ganache": "docker-compose -f docker-compose-ganache.yaml --env-file ./.env up --build"
+  },
+  "dependencies": {
+    "@neo4j/graphql-ogm": "^2.3.0",
+    "bull": "^4.1.0",
+    "dotenv": "^10.0.0",
+    "ethereumjs-tx": "^2.1.2",
+    "ioredis": "^4.28.0",
+    "neo4j-driver": "^4.3.4",
+    "solc": "^0.8.10",
+    "web3": "^1.6.0",
+    "express": "^4.17.1",
+    "express-async-errors": "^3.1.1"
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.3",
+    "debug": "^4.3.2",
+    "env.gql": "^1.0.0",
+    "jest": "^27.3.1",
+    "superagent": "^6.1.0",
+    "supertest": "^6.1.6",
+    "@openzeppelin/contracts": "^4.3.2",
+    "truffle": "^5.4.18"
   }
 }

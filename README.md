@@ -14,22 +14,22 @@ This project is part of a case study, you can read the case study [here](https:/
 
 ### Account Creation
 
-When a user creates an account, a message is placed onto the [Receiver queue](), the queue listener will create a [Receiver Contract](./contracts/contracts/Receiver.sol) associated with that User. Each Receiver is designed to accept [ERC20 USDT](https://tether.to/) token and is a child of/created by the [Bank Contract](./contracts/contracts/Bank.sol).
+When a user creates an account, a message is placed onto the [Receiver Deploy Queue](./src/receiver/deploy.js), the queue listener will create a [Receiver Contract](./src/contracts/contracts/Receiver.sol) associated with that User. Each Receiver is designed to accept [ERC20 USDT](https://tether.to/) token and is a child of/created by the [Bank Contract](./src/contracts/contracts/Bank.sol).
 
 ### Deposits
 
-When the [Receiver Contract](./contracts/contracts/Receiver.sol) is deployed the user will be able to query for there deposit address and deposit funds. The [Watcher]() watches the logs for the [ERC20 USDT](https://tether.to/) token, reconciles the sender address to an associated Receiver contract and then is able to relate a deposit to a user, thus updating the users balance.
+When the [Receiver Contract](./src/contracts/contracts/Receiver.sol) is deployed the user will be able to query for there deposit address and deposit funds. The [Watcher]() watches the logs for the [ERC20 USDT](https://tether.to/) token, reconciles the sender address to an associated Receiver contract and then is able to relate a deposit to a user, thus updating the users balance.
 
 ### Withdrawals
 
 When a user requests a withdrawal a 'Withdrawal Request' is placed on the [Withdrawer]() queue. The Withdrawer shall and shall facilitate the transaction plus append a deposit against the User.
 
-## Services
+## Modules
 
-The project consists of following Node.js services deployed independently:
+The server consists of following modules:
 
-1. [API]() - User facing REST, handles account creation and withdrawal requests.
-2. [Receiver]() - Listens for account creation and deploys the [Receiver Contract](./contracts/contracts/Receiver.sol) and associates the deployed contract with the new User.
+1. [API](./src/api) - User facing REST, handles account creation and withdrawal requests.
+2. [Receiver](./src/receiver) - Listens for account creation and deploys the [Receiver Contract](./src/contracts/contracts/Receiver.sol) and associates the deployed contract with the new User.
 3. [Withdrawer]() - Listens for withdrawal requests and facilitates the transaction.
 4. [Watcher]() - Watches the [USDT Transfer](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC20/IERC20.sol#L75) logs and records a deposit if the 'to' address is one belonging to a User.
 
@@ -37,19 +37,17 @@ The project consists of following Node.js services deployed independently:
 
 This project uses the following:
 
-1. [Neo4j]() - For account storage, keeping track of deposits and withdrawals and use to query and aggregate the users total balance.
-2. [Redis]() - Used as a queue for handling the Deployment of each users [Forwarder]() contract and each withdrawal request.
-3. [Ganache]() - Used as a development blockchain for testing
+1. [Neo4j](https://neo4j.com/) - For account storage, keeping track of deposits and withdrawals and use to query and aggregate the users total balance.
+2. [Redis](https://redis.com/) - Used as a queue for handling the Deployment of each users [Forwarder]() contract and each withdrawal request.
+3. [Ganache](https://www.trufflesuite.com/ganache) - Used as a development blockchain for testing
 
 ## Data Model
 
-High level overview of whats stored in [Neo4j]():
+High level overview of whats stored in [Neo4j](https://neo4j.com/):
 
-![Data Model](./docs/images/data-model.png)
+![Data Model](./docs/images/data-model.svg)
 
 ## Development
-
-For starting services manually check each services README.md. Otherwise use Docker 🐳:
 
 ```bash
 npm run docker-dev
