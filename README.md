@@ -19,7 +19,7 @@ Other examples are:
 3. Topping up gambling account
 4. Paying for goods in a store
 
-With the current blockchain ecosystem still lacking; adoption, age and technological adaptors, the listed reasons in the paragraph above are difficult to implement with pure decentralization. Using pure blockchain tech would mean your users will have to change their current way of interacting with your app. Right now if I wanted to deposit tether into; an exchange or an investment account id be presented with an address where I could simply send the funds however I see fit, here are two examples:
+With the current blockchain ecosystem still lacking; adoption, age and technological adaptors, the listed reasons in the paragraph above are difficult to implement with pure decentralization. Using pure blockchain tech would mean your users will have to change their current way of interacting with your app. Right now if I wanted to deposit [USDT](https://tether.to/) into an exchange or an investment account I would be presented with an address, where I could simply send the funds however I see fit. Here are two examples of being presented with an address:
 
 ### Coinbase Pro Deposit
 
@@ -32,6 +32,14 @@ https://pro.coinbase.com/
 https://nexo.io
 
 ![Nexo Deposit](./docs/images/nexo-deposit.png)
+
+Presenting your users with an address, like demonstrated, allows for the greatest flexibility when it comes to paying for whatever service you have to offer. Most of the common Joe, who hold crypto, will hold crypto in an exchange, and so presenting them with an address means they can simply copy the address, use their exchanges mechanism to send the funds. This process is usually a straightforward one and feels, to the user, like a normal bank payment. Without presenting your users with their own unique address to deposit, like the two above, you would only have one other option - Expect your users to interact with a decentralized application, this would require your users to use an unfamiliar tool such as metamask:
+
+https://metamask.io/
+
+![Metamask](./docs/images/metamask.png)
+
+Finally, this way of accepting payments means you can use the code in this project to easily implement a crypto currency payment gateway into your project without moving lots of your infrastructure onto the blockchain.
 
 ## How does it work ?
 
