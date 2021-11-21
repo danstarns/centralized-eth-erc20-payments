@@ -6,7 +6,32 @@ Centralized Ethereum ERC20 Payment Processor
 
 Ever wondered how crypto exchanges manage deposits and withdrawals ? This project aims to demonstrate how to do user management, handle deposits and withdrawals plus keep track of each users balance in a centralized store.
 
-This project is part of a case study, you can read the case study [here](https://medium.com/@danstarns/handling-ethereum-erc20-deposits-and-withdrawals-like-an-exchange-a-case-study-256fe6602a7a).
+~~This project is part of a case study, you can read the case study [here](https://medium.com/@danstarns/handling-ethereum-erc20-deposits-and-withdrawals-like-an-exchange-a-case-study-256fe6602a7a).~~ - Work in progress 🏗
+
+## Why centralized ?
+
+This is a great question! The movement of blockchain is all about decentralization, transparency and accountability and thus putting the term 'centralized' in here seems to negate the incentives. However, there are many use cases to centrally keep track of a 'Users Balance' and the first, for example, is an exchange - Users deposit funds and then use the funds to buy and sell, this is of course talking about a centralized exchange. Then you have centralized investment accounts such as; [Nexo](https://nexo.io) & [Celsius](https://celsius.network/). Another example is if you were to make a game and accept a deposit of crypto to 'Top Up' a users virtual balance. Finally, you might be [Tesla](https://www.tesla.com/en_gb) and wanting to accept crypto payments.
+
+Other examples are:
+
+1. Paying mortgage
+2. Paying Taxes
+3. Topping up gambling account
+4. Paying for goods in a store
+
+With the current blockchain ecosystem still lacking; adoption, age and technological adaptors, the listed reasons in the paragraph above are difficult to implement with pure decentralization. Using pure blockchain tech would mean your users will have to change their current way of interacting with your app. Right now if I wanted to deposit tether into; an exchange or an investment account id be presented with an address where I could simply send the funds however I see fit, here are two examples:
+
+### Coinbase Pro Deposit
+
+https://pro.coinbase.com/
+
+![Coinbase Deposit](./docs/images/coinbase-deposit.png)
+
+### Nexo Deposit
+
+https://nexo.io
+
+![Nexo Deposit](./docs/images/nexo-deposit.png)
 
 ## How does it work ?
 
