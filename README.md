@@ -37,6 +37,8 @@ Presenting your users with an address, like demonstrated, allows for the greates
 
 https://metamask.io/
 
+> Note that using Metamask as an example here is not shedding any bad light on it! Metamask is a great tool and helps users interact with decentralized applications with ease. The point that's being expressed is - Its different from what most users are used to and would require users to transferer funds to their Metamask wallet before interacting with your app thus using extra gas.
+
 ![Metamask](./docs/images/metamask.png)
 
 Finally, this way of accepting payments means you can use the code in this project to easily implement a crypto currency payment gateway into your project without moving lots of your infrastructure onto the blockchain.
@@ -47,15 +49,17 @@ Finally, this way of accepting payments means you can use the code in this proje
 
 ### Account Creation
 
-When a user creates an account, a message is placed onto the [Receiver Deploy Queue](./src/receiver/deploy.js), the queue listener will create a [Receiver Contract](./src/contracts/contracts/Receiver.sol) associated with that User. Each Receiver is designed to accept [ERC20 USDT](https://tether.to/) token and is a child of/created by the [Bank Contract](./src/contracts/contracts/Bank.sol).
+When a user creates an account, a message is placed onto the [Receiver Deploy Queue](./src/receiver/deploy.js), the queue listener will deploy a [Receiver Contract](./src/contracts/contracts/Receiver.sol) associated with that user. On deployment transaction receipt another message is placed on the [Receiver Deployed Queue](./src/receiver/deployed.js) where the listener will watch and wait for the confirmation of the contract deployment. On confirmation, the deployed listener will update Neo4j associating the receiver address to the new user. Each Receiver is designed to accept [ERC20 USDT](https://tether.to/) token and is a child of/created by the [Bank Contract](./src/contracts/contracts/Bank.sol).
+
+> This approach means that you are spending gas each time a user signs up, this is because of the `Receiver` contract deployment. You will have to at some point spend this gas to receive funds the way described in this project, however, you may want to delay the deployment of the contract until your user has passed some form of verification such as [KYC](https://www.fool.com/the-ascent/cryptocurrency/articles/what-is-kyc-and-why-do-crypto-exchanges-require-it/).
 
 ### Deposits
 
-When the [Receiver Contract](./src/contracts/contracts/Receiver.sol) is deployed the user will be able to query for there deposit address and deposit funds. The [Watcher]() watches the logs for the [ERC20 USDT](https://tether.to/) token, reconciles the sender address to an associated Receiver contract and then is able to relate a deposit to a user, thus updating the users balance.
+When the [Receiver Contract](./src/contracts/contracts/Receiver.sol) is deployed the user will be able to query for there deposit address and deposit funds. The [Watcher]() watches the `Transfer` logs for the [ERC20 USDT](https://tether.to/) token, reconciles the sender address to an associated Receiver contract and then is able to relate a deposit to a user, thus updating the users balance.
 
 ### Withdrawals
 
-When a user requests a withdrawal a 'Withdrawal Request' is placed on the [Withdrawer]() queue. The Withdrawer shall and shall facilitate the transaction plus append a deposit against the User.
+When a user requests a withdrawal a 'Withdrawal Request' is placed on the [Withdraw Queue](./src/withdraw/withdrawn.js) queue. On withdraw transaction receipt another message is placed on the [Withdrawn Queue](./src/withdrawer/withdrawn.js) where the listener will watch and wait for the confirmation of the withdraw transaction. On transaction success, the listener shall append a deposit against the User.
 
 ## Modules
 
