@@ -10,7 +10,7 @@
     "start": "node ./src/index.js",
     "test": "npm run test-contracts && npm run test-api",
     "docker-dev": "docker-compose -f ./docker-compose.yaml -f docker-compose-neo4j.yaml -f docker-compose-redis.yaml -f docker-compose-ganache.yaml --env-file ./.env up --build",
-    "docker-test": "docker-compose -f ./docker-compose-test.yaml -f docker-compose-neo4j.yaml -f docker-compose-redis.yaml -f docker-compose-ganache.yaml --env-file ./.env up --build --abort-on-container-exit",
+    "docker-test": "docker-compose -f ./docker-compose-test.yaml -f docker-compose-neo4j.yaml -f docker-compose-redis.yaml -f docker-compose-ganache.yaml --env-file ./.env.docker-compose up --build --abort-on-container-exit",
     "install-all": "cd ./contracts && npm install && cd ../services/api && npm install && cd ../receiver && npm run install",
     "docker-ganache": "docker-compose -f docker-compose-ganache.yaml --env-file ./.env up --build"
   },
