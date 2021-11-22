@@ -9,6 +9,7 @@ const {
 const path = require("path");
 const solc = require("solc");
 const fs = require("fs");
+const { Transaction } = require("ethereumjs-tx");
 
 const BankContent = fs.readFileSync(
   path.resolve(__dirname, "contracts", "Bank.sol"),
@@ -141,6 +142,35 @@ async function main() {
 
   console.log(
     `TestERC20.sol deployed at address: ${testERC20Receipt.contractAddress}`
+  );
+
+  const usdtContract = new web3.client.eth.Contract(
+    compiled.contracts["TestERC20.sol"].TestERC20.abi,
+    testERC20Receipt.contractAddress
+  );
+
+  const addBalanceToAddress = usdtContract.methods.addBalanceToAddress(
+    10000,
+    TRANSACTION_SIGNER_PUBLIC_KEY
+  );
+
+  const txCount = await web3.client.eth.getTransactionCount(
+    TRANSACTION_SIGNER_PUBLIC_KEY
+  );
+
+  const tx = new Transaction({
+    nonce: web3.utils.toHex(txCount),
+    gasLimit: web3.utils.toHex(5000000), // TODO wtf is this dan
+    gasPrice: web3.utils.toHex(100000000000), // TODO wtf is this dan
+    data: addBalanceToAddress.encodeABI(),
+    from: TRANSACTION_SIGNER_PUBLIC_KEY,
+    to: testERC20Receipt.contractAddress,
+    value: "0x00", // TODO wtf is this dan
+  });
+  tx.sign(Buffer.from(TRANSACTION_SIGNER_PRIVATE_KEY, "hex"));
+
+  await web3.client.eth.sendSignedTransaction(
+    "0x" + tx.serialize().toString("hex")
   );
 
   process.exit(0);

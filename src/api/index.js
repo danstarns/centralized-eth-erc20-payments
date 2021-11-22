@@ -7,6 +7,7 @@ const { SERVER_PORT } = require("../config");
 const app = express();
 app.use(express.json());
 app.post("/signup", routes.signup);
+app.get("/me", routes.me);
 app.use((error, req, res, next) => {
   res.status(500);
   debug(error.message);

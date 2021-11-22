@@ -8,6 +8,7 @@ const typeDefs = `
       password: String!
       createdAt: DateTime @timestamp
       receiver: Receiver @relationship(type: "HAS_RECEIVER", direction: OUT)
+      deposits: [Deposit] @relationship(type: "HAS_DEPOSIT", direction: OUT)
     }
 
     type Receiver {
@@ -30,8 +31,16 @@ const typeDefs = `
     type Bank {
       id: ID! @id(autogenerate: true)
       address: String!
+      uptoDateWithBlockNumber: Int
       transaction: Transaction! @relationship(type: "HAS_TRANSACTION", direction: OUT)
       receivers: [Receiver] @relationship(type: "HAS_RECEIVER", direction: OUT)
+    }
+
+    type Deposit {
+      id: ID! @id(autogenerate: true)
+      amount: Int!
+      transaction: Transaction! @relationship(type: "HAS_TRANSACTION", direction: OUT)
+      receiver: Receiver! @relationship(type: "HAS_DEPOSIT", direction: IN)
     }
 `;
 

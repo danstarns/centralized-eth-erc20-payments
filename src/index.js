@@ -2,6 +2,7 @@ require("dotenv").config();
 const debug = require("./utils").debug("main");
 const connections = require("./connections");
 const receiver = require("./receiver");
+const watcher = require("./watcher");
 const api = require("./api");
 
 async function main() {
@@ -9,7 +10,9 @@ async function main() {
 
   await connections.connect();
 
-  await receiver.listen();
+  receiver.listen();
+
+  watcher.watch();
 
   await api.start();
 

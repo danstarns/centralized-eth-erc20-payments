@@ -1,5 +1,5 @@
 const debug = require("../utils").debug("web3");
-const { WEB3_HTTP_PROVIDER, BANK_ID } = require("../config");
+const { WEB3_HTTP_PROVIDER, USDT_ADDRESS } = require("../config");
 const Web3 = require("web3");
 const path = require("path");
 
@@ -14,10 +14,18 @@ const BankABI = require(path.resolve(
   "Bank.json"
 ));
 
+const erc20ABI = require("@openzeppelin/contracts/build/contracts/ERC20.json");
+
 async function getBankContract(address) {
   const bank = new client.eth.Contract(BankABI.abi, address);
 
   return bank;
+}
+
+function getUSDTContract() {
+  const contract = new client.eth.Contract(erc20ABI.abi, USDT_ADDRESS);
+
+  return () => contract;
 }
 
 async function connect() {
@@ -33,4 +41,5 @@ module.exports = {
   utils: Web3.utils,
   connect,
   getBankContract,
+  getUSDTContract: getUSDTContract(),
 };
