@@ -5,6 +5,7 @@
   "scripts": {
     "test-api": "jest --forceExit",
     "test-contracts": "truffle test",
+    "build-contracts": "truffle compile",
     "dev-deploy": "node ./src/contracts/dev-deploy",
     "start": "node ./src/index.js",
     "test": "npm run test-contracts && npm run test-api",

@@ -1,6 +1,6 @@
 module.exports = {
   contracts_directory: "./src/contracts",
-  contracts_build_directory: "./src/contracts/build",
+  contracts_build_directory: "./src/contracts/build/contracts",
   migrations_directory: "./src/contracts/migrations",
   test_directory: "./test/contracts",
   compilers: {
