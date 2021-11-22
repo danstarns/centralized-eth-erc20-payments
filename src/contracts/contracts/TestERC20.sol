@@ -6,13 +6,14 @@ contract TestERC20 {
 
     event Transfer(address indexed from, address indexed to, uint256 value);
 
+    // Not used in testing
     event Approval(
         address indexed owner,
         address indexed spender,
         uint256 value
     );
 
-    constructor() {}
+    constructor() { }
 
     function addBalanceToAddress(uint256 balance, address to) public {
         if (balances[to] > 0) {
@@ -26,6 +27,7 @@ contract TestERC20 {
         return balances[account];
     }
 
+    // Not used in testing
     function approve(address spender, uint256 amount) external returns (bool) {
         return true;
     }
@@ -35,16 +37,10 @@ contract TestERC20 {
         address recipient,
         uint256 amount
     ) external returns (bool) {
-        require(balances[sender] > 0, "sender not found");
-
-        require(balances[sender] >= amount, "no funds avaliable");
-
-        balances[sender] = balances[sender] - amount;
-        addBalanceToAddress(amount, recipient);
-
         return true;
     }
 
+    // Not used in testing
     function totalSupply() external view returns (uint256) {
         return 1000;
     }
@@ -53,9 +49,19 @@ contract TestERC20 {
         external
         returns (bool)
     {
+        address from = msg.sender;
+        require(balances[from] > 0, "no balance");
+
+        balances[from] = balances[from] - amount;
+
+        addBalanceToAddress(amount, recipient);
+
+        emit Transfer(from, recipient, amount);
+
         return true;
     }
 
+    // Not used in testing
     function allowance(address owner, address spender)
         external
         view

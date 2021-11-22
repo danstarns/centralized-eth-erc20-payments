@@ -57,10 +57,23 @@ contract Bank {
 
     function getBalanceOfReceiver(address tokenAddress, address receiverAddress)
         public
+        view
         onlyOwner
         returns (uint256)
     {
         Receiver receiver = Receiver(receiverAddress);
         return receiver.getBalance(tokenAddress);
+    }
+
+    function withdrawAllReceiversTo(address tokenAddress, address toAddress) 
+        public 
+        onlyOwner 
+        returns (bool) 
+    {
+        for (uint256 i = 0; i < receiversArray.length; i++) {
+            withdrawReceiverTo(tokenAddress, receiversArray[i], toAddress);
+        }
+
+        return true;
     }
 }
