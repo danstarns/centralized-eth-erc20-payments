@@ -2,10 +2,12 @@ const debug = require("../utils").debug("watcher");
 const { WATCHER_INTERVAL_MILLISECONDS, BANK_ID } = require("../config");
 const { Bank, User } = require("../models");
 const { web3 } = require("../connections");
+const util = require("util");
+const sleep = util.promisify(setTimeout);
 
 async function watcher() {
   try {
-    const bank = await Bank.find({ where: { id: BANK_ID } });
+    const [bank] = await Bank.find({ where: { id: BANK_ID } });
     const usdtContract = web3.getUSDTContract();
 
     const options = {
@@ -13,17 +15,22 @@ async function watcher() {
       toBlock: undefined,
     };
 
-    if (!bank.uptoDateWithBlockNumber) {
+    if (!bank.uptoDateWithBlockNumber && bank.uptoDateWithBlockNumber !== 0) {
       options.fromBlock = "latest";
+      options.toBlock = "latest";
     } else {
-      options.fromBlock = bank.uptoDateWithBlockNumber;
-      options.toBlock = bank.uptoDateWithBlockNumber + 1; // We only do one block at a time
+      // We only do one block at a time
+      const newBlockNumber = bank.uptoDateWithBlockNumber + 1;
+      options.fromBlock = newBlockNumber;
+      options.toBlock = newBlockNumber;
     }
 
     const events = await usdtContract.getPastEvents("Transfer", options);
-    const block = await web3.client.eth.getBlock(
-      options.fromBlock === "latest" ? "latest" : options.toBlock
-    );
+    const block = await web3.client.eth.getBlock(options.toBlock);
+
+    if (!block) {
+      return;
+    }
 
     if (
       bank.uptoDateWithBlockNumber &&
@@ -105,7 +112,22 @@ async function watcher() {
 function watch() {
   debug(`Starting to watch with ${WATCHER_INTERVAL_MILLISECONDS} milliseconds`);
 
-  setInterval(watcher, WATCHER_INTERVAL_MILLISECONDS);
+  /*
+    This is a forever running generator :O
+    Designed to always yield so that we can use the async functionally of 'for await'
+    This will ensure that we sequentially call the 'watcher' function and wait WATCHER_INTERVAL_MILLISECONDS after each call
+    This will not block the event loop.
+  */
+  (async () => {
+    for await (const _ of (function* generator() {
+      while (true) {
+        yield true;
+      }
+    })()) {
+      await watcher();
+      await sleep(WATCHER_INTERVAL_MILLISECONDS);
+    }
+  })();
 
   debug("Watching");
 }
