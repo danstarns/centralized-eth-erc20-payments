@@ -12,6 +12,7 @@ async function me(req, res) {
             receiver {
               address
             }
+            balance
         }
     `,
   });

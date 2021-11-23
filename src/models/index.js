@@ -9,6 +9,11 @@ const typeDefs = `
       createdAt: DateTime @timestamp
       receiver: Receiver @relationship(type: "HAS_RECEIVER", direction: OUT)
       deposits: [Deposit] @relationship(type: "HAS_DEPOSIT", direction: OUT)
+      balance: Int @cypher(statement: """
+        MATCH (this)-[:HAS_DEPOSIT]->(d:Deposit)
+        WITH sum(d.amount) AS balance
+        RETURN balance
+      """)
     }
 
     type Receiver {
