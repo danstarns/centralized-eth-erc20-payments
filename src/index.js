@@ -1,5 +1,5 @@
 require("dotenv").config();
-const debug = require("./utils").debug("main");
+const debug = require("./utils/debug")("main");
 const connections = require("./connections");
 const receiver = require("./receiver");
 const watcher = require("./watcher");

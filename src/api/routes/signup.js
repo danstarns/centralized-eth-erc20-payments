@@ -1,5 +1,5 @@
 const { User } = require("../../models");
-const { redis } = require("../../connections");
+const { deploy } = require("../../receiver");
 
 async function signup(req, res) {
   const { email, password } = req.body;
@@ -20,7 +20,7 @@ async function signup(req, res) {
 
   const user = users[0];
 
-  await redis.queues.Deploy.add({ user }, { attempts: 100, backoff: 5000 });
+  await deploy.addToQueue({ user });
 
   res.json(user);
 }

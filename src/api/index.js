@@ -1,8 +1,8 @@
 require("express-async-errors");
 const express = require("express");
-const debug = require("../utils").debug("Server");
+const debug = require("../utils/debug")("Server");
 const routes = require("./routes");
-const { SERVER_PORT } = require("../config");
+const config = require("../config");
 
 const app = express();
 app.use(express.json());
@@ -15,9 +15,9 @@ app.use((error, req, res, next) => {
 });
 
 async function start() {
-  debug(`Starting on port: ${SERVER_PORT}`);
+  debug(`Starting on port: ${config.SERVER_PORT}`);
 
-  await app.listen(SERVER_PORT);
+  await app.listen(config.SERVER_PORT);
 
   debug("Started");
 }

@@ -1,4 +1,4 @@
-const debug = require("../utils").debug("connections");
+const debug = require("../utils/debug")("connections");
 const neo4j = require("./neo4j");
 const redis = require("./redis");
 const web3 = require("./web3");

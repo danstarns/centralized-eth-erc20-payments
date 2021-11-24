@@ -1,30 +1,30 @@
 const { redis, web3 } = require("../connections");
 const { User } = require("../models");
 const { Bank } = require("../models");
-const { BANK_ID } = require("../config");
+const config = require("../config");
 
 function listener(job, done) {
   (async function () {
     try {
-      const [user] = await User.find({ where: { id: job.data.user.id } });
-
       const transaction = await web3.client.eth.getTransactionReceipt(
         job.data.transactionHash
       );
 
       if (!transaction || transaction.status === false) {
-        // Queue will retry this job
-        throw new Error("Transaction not completed");
+        done();
+
+        await addToQueue(job.data);
+
+        return;
       }
 
-      const blockNumber = transaction.blockNumber;
-
-      const [{ address }] = await Bank.find({ where: { id: BANK_ID } });
-      const bankContract = await web3.getBankContract(address);
+      const [user] = await User.find({ where: { id: job.data.user.id } });
+      const [bank] = await Bank.find({ where: { id: config.BANK_ID } });
+      const bankContract = web3.getBankContract(bank.address);
 
       const events = await bankContract.getPastEvents("ReceiverCreated", {
-        fromBlock: blockNumber,
-        toBlock: blockNumber,
+        fromBlock: transaction.blockNumber,
+        toBlock: transaction.blockNumber,
       });
 
       const validEvent = events.find(
@@ -32,8 +32,11 @@ function listener(job, done) {
       );
 
       if (!validEvent) {
-        // Queue will retry this job
-        throw new Error("Transaction not completed");
+        done();
+
+        await addToQueue(job.data);
+
+        return;
       }
 
       const receiverAddress = validEvent.returnValues.receiverAddress;
@@ -80,4 +83,14 @@ function listen() {
   redis.queues.Deployed.process(listener);
 }
 
-module.exports = { listen };
+async function addToQueue({ transactionHash, user }) {
+  await redis.queues.Deployed.add(
+    {
+      transactionHash,
+      user: { id: user.id },
+    },
+    { attempts: 10, backoff: 60000 }
+  );
+}
+
+module.exports = { listen, addToQueue };

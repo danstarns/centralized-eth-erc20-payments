@@ -1,5 +1,5 @@
-const debug = require("../utils").debug("watcher");
-const { WATCHER_INTERVAL_MILLISECONDS, BANK_ID } = require("../config");
+const debug = require("../utils/debug")("watcher");
+const config = require("../config");
 const { Bank, User } = require("../models");
 const { web3 } = require("../connections");
 const util = require("util");
@@ -7,7 +7,7 @@ const sleep = util.promisify(setTimeout);
 
 async function watcher() {
   try {
-    const [bank] = await Bank.find({ where: { id: BANK_ID } });
+    const [bank] = await Bank.find({ where: { id: config.BANK_ID } });
     const usdtContract = web3.getUSDTContract();
 
     const options = {
@@ -42,7 +42,7 @@ async function watcher() {
     if (!events.length) {
       if (block.transactions.length) {
         await Bank.update({
-          where: { id: BANK_ID },
+          where: { id: config.BANK_ID },
           update: { uptoDateWithBlockNumber: block.number },
         });
       }
@@ -99,7 +99,7 @@ async function watcher() {
     );
 
     await Bank.update({
-      where: { id: BANK_ID },
+      where: { id: config.BANK_ID },
       update: { uptoDateWithBlockNumber: block.number },
     });
   } catch (error) {
@@ -110,7 +110,9 @@ async function watcher() {
 }
 
 function watch() {
-  debug(`Starting to watch with ${WATCHER_INTERVAL_MILLISECONDS} milliseconds`);
+  debug(
+    `Starting to watch with ${config.WATCHER_INTERVAL_MILLISECONDS} milliseconds`
+  );
 
   /*
     This is a forever running generator :O
@@ -125,7 +127,7 @@ function watch() {
       }
     })()) {
       await watcher();
-      await sleep(WATCHER_INTERVAL_MILLISECONDS);
+      await sleep(config.WATCHER_INTERVAL_MILLISECONDS);
     }
   })();
 

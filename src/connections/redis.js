@@ -1,5 +1,5 @@
 const Queue = require("bull");
-const debug = require("../utils").debug("Redis");
+const debug = require("../utils/debug")("Redis");
 const {
   REDIS_HOST,
   REDIS_PORT,
