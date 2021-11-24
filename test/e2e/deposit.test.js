@@ -110,7 +110,7 @@ describe("deposit end to end test", () => {
       "0x" + transferTx.serialize().toString("hex")
     );
 
-    await sleep(WATCHER_INTERVAL_MILLISECONDS * 2);
+    await sleep(WATCHER_INTERVAL_MILLISECONDS * 3);
 
     [user] = await User.find({
       where: { email },
