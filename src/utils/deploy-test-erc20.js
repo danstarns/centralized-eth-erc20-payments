@@ -1,10 +1,10 @@
+const debug = require("../utils/debug")("deploy-test-erc20");
 const { web3 } = require("../connections");
 const path = require("path");
 const solc = require("solc");
 const fs = require("fs");
 const findSolImports = require("./find-sol-imports");
 const contractsFolder = path.join(__dirname, "../", "contracts", "contracts");
-const { Transaction } = require("ethereumjs-tx");
 
 const ERC20Content = fs.readFileSync(
   path.resolve(contractsFolder, "TestERC20.sol"),
@@ -12,6 +12,8 @@ const ERC20Content = fs.readFileSync(
 );
 
 async function deployTestErc20({ signerPublicKey, signerPrivateKey }) {
+  debug("Deploying");
+
   const compiled = JSON.parse(
     solc.compile(
       JSON.stringify({
@@ -46,7 +48,7 @@ async function deployTestErc20({ signerPublicKey, signerPrivateKey }) {
   const testERC20Signed = await web3.client.eth.accounts.signTransaction(
     {
       data: testERC20Tx.encodeABI(),
-      gas: await testERC20Tx.estimateGas(),
+      gas: 600000,
       nonce: nonce,
     },
     signerPrivateKey
@@ -56,30 +58,14 @@ async function deployTestErc20({ signerPublicKey, signerPrivateKey }) {
     testERC20Signed.rawTransaction
   );
 
+  debug("Deployment receipt ", testERC20Receipt);
+
   const usdtContract = new web3.client.eth.Contract(
     compiled.contracts["TestERC20.sol"].TestERC20.abi,
     testERC20Receipt.contractAddress
   );
 
-  const addBalanceToAddress = usdtContract.methods.addBalanceToAddress(
-    100000000,
-    signerPublicKey
-  );
-
-  const tx = new Transaction({
-    nonce: web3.utils.toHex(nonce + 1),
-    gasLimit: web3.utils.toHex(5000000), // TODO wtf is this dan
-    gasPrice: web3.utils.toHex(100000000000), // TODO wtf is this dan
-    data: addBalanceToAddress.encodeABI(),
-    from: signerPublicKey,
-    to: testERC20Receipt.contractAddress,
-    value: "0x00", // TODO wtf is this dan
-  });
-  tx.sign(Buffer.from(signerPrivateKey, "hex"));
-
-  await web3.client.eth.sendSignedTransaction(
-    "0x" + tx.serialize().toString("hex")
-  );
+  debug("Completed");
 
   return { receipt: testERC20Receipt, contract: usdtContract };
 }

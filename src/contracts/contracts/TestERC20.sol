@@ -13,7 +13,10 @@ contract TestERC20 {
         uint256 value
     );
 
-    constructor() { }
+    constructor() public {
+        address sender = msg.sender;
+        balances[sender] = 10000;
+    }
 
     function addBalanceToAddress(uint256 balance, address to) public {
         if (balances[to] > 0) {

@@ -6,15 +6,11 @@ const request = require("supertest");
 const util = require("util");
 const sleep = util.promisify(setTimeout);
 const config = require("../../src/config");
-const {
-  TRANSACTION_SIGNER_PRIVATE_KEY,
-  TRANSACTION_SIGNER_PUBLIC_KEY,
-  WATCHER_INTERVAL_MILLISECONDS,
-} = config;
+const { TRANSACTION_SIGNER_PRIVATE_KEY, TRANSACTION_SIGNER_PUBLIC_KEY } =
+  config;
 const faker = require("faker");
 const { expect } = require("chai");
 const { Bank, User } = require("../../src/models");
-const { Transaction } = require("ethereumjs-tx");
 
 describe("deposit end to end test", () => {
   test("should sign up user, create a receiver and deposit into", async () => {
@@ -66,7 +62,7 @@ describe("deposit end to end test", () => {
     });
 
     // Wait for receiver to be deployed
-    await sleep(5000);
+    await sleep(30000);
 
     [user] = await User.find({
       where: { email },
@@ -91,26 +87,25 @@ describe("deposit end to end test", () => {
       100
     );
 
-    const txCount = await web3.client.eth.getTransactionCount(
+    const nonce = await web3.client.eth.getTransactionCount(
       TRANSACTION_SIGNER_PUBLIC_KEY
     );
 
-    const transferTx = new Transaction({
-      nonce: web3.utils.toHex(txCount),
-      gasLimit: web3.utils.toHex(5000000), // TODO wtf is this dan
-      gasPrice: web3.utils.toHex(100000000000), // TODO wtf is this dan
-      data: transfer.encodeABI(),
-      from: TRANSACTION_SIGNER_PUBLIC_KEY,
-      to: usdtTransaction.receipt.contractAddress,
-      value: "0x00", // TODO wtf is this dan
-    });
-    transferTx.sign(Buffer.from(TRANSACTION_SIGNER_PRIVATE_KEY, "hex"));
-
-    const depositReceipt = await web3.client.eth.sendSignedTransaction(
-      "0x" + transferTx.serialize().toString("hex")
+    const transferSigned = await web3.client.eth.accounts.signTransaction(
+      {
+        to: usdtTransaction.receipt.contractAddress,
+        data: transfer.encodeABI(),
+        gas: 1400000,
+        nonce,
+      },
+      config.TRANSACTION_SIGNER_PRIVATE_KEY
     );
 
-    await sleep(WATCHER_INTERVAL_MILLISECONDS * 3);
+    const transferReceipt = await web3.client.eth.sendSignedTransaction(
+      transferSigned.rawTransaction
+    );
+
+    await sleep(30000);
 
     [user] = await User.find({
       where: { email },
@@ -137,7 +132,7 @@ describe("deposit end to end test", () => {
     expect(user.deposits[0].amount).to.equal(100);
     expect(user.deposits.length).to.equal(1);
     expect(user.deposits[0].transaction.transactionHash).to.equal(
-      depositReceipt.transactionHash
+      transferReceipt.transactionHash
     );
     expect(user.deposits[0].receiver.address).to.equal(receiverAddress);
     expect(user.deposits[0].receiver.bank.id).to.equal(banks[0].id);

@@ -1,3 +1,4 @@
+const debug = require("../utils/debug")("deploy-bank");
 const { web3 } = require("../connections");
 const path = require("path");
 const solc = require("solc");
@@ -16,6 +17,8 @@ const ReceiverContent = fs.readFileSync(
 );
 
 async function deployBank({ signerPublicKey, signerPrivateKey }) {
+  debug("Deploying");
+
   const compiled = JSON.parse(
     solc.compile(
       JSON.stringify({
@@ -53,7 +56,7 @@ async function deployBank({ signerPublicKey, signerPrivateKey }) {
   const bankTxSinged = await web3.client.eth.accounts.signTransaction(
     {
       data: bankTx.encodeABI(),
-      gas: await bankTx.estimateGas(),
+      gas: 1400000,
       nonce,
     },
     signerPrivateKey
@@ -62,6 +65,10 @@ async function deployBank({ signerPublicKey, signerPrivateKey }) {
   const bankReceipt = await web3.client.eth.sendSignedTransaction(
     bankTxSinged.rawTransaction
   );
+
+  debug("Deployment receipt ", bankReceipt);
+
+  debug("Completed");
 
   return { receipt: bankReceipt, contract: bankInstance };
 }

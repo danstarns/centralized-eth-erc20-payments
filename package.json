@@ -4,7 +4,7 @@
   "author": "danielstarns@hotmail.com",
   "scripts": {
     "test-api": "jest --forceExit api",
-    "test-e2e": "jest --forceExit --testTimeout=30000 e2e",
+    "test-e2e": "jest --forceExit --testTimeout=999999 e2e",
     "test-contracts": "truffle test",
     "build-contracts": "truffle compile",
     "dev-deploy": "node ./src/contracts/dev-deploy",
