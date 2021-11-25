@@ -19,6 +19,7 @@ const typeDefs = `
         BANK_ID: String!
         WATCHER_INTERVAL_MILLISECONDS: Int!
         USDT_ADDRESS: String!
+        JWT_SECRET: String!
     }
 `;
 
@@ -40,6 +41,7 @@ const {
   BANK_ID,
   WATCHER_INTERVAL_MILLISECONDS,
   USDT_ADDRESS,
+  JWT_SECRET,
 } = envGQL({ typeDefs });
 
 module.exports = {
@@ -60,4 +62,5 @@ module.exports = {
   BANK_ID,
   WATCHER_INTERVAL_MILLISECONDS,
   USDT_ADDRESS,
+  JWT_SECRET,
 };

@@ -3,11 +3,13 @@ const express = require("express");
 const debug = require("../utils/debug")("Server");
 const routes = require("./routes");
 const config = require("../config");
+const authenticateRequest = require("../utils/authenticate-request");
 
 const app = express();
 app.use(express.json());
 app.post("/signup", routes.signup);
-app.get("/me", routes.me);
+app.post("/login", routes.login);
+app.get("/me", authenticateRequest, routes.me);
 app.use((error, req, res, next) => {
   res.status(500);
   debug(error.message);

@@ -17,12 +17,14 @@
   },
   "dependencies": {
     "@neo4j/graphql-ogm": "^2.3.0",
+    "bcrypt": "^5.0.1",
     "bull": "^4.1.0",
     "dotenv": "^10.0.0",
     "ethereumjs-tx": "^2.1.2",
     "express": "^4.17.1",
     "express-async-errors": "^3.1.1",
     "ioredis": "^4.28.0",
+    "jsonwebtoken": "^8.5.1",
     "neo4j-driver": "^4.3.4",
     "solc": "^0.8.10",
     "web3": "^1.6.0"
