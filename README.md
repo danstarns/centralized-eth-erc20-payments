@@ -25,13 +25,17 @@ With the current blockchain ecosystem still lacking; adoption, age and technolog
 
 https://pro.coinbase.com/
 
-![Coinbase Deposit](./docs/images/coinbase-deposit.png)
+<p align="center" width="100%">
+    <img width="33%" src="./docs/images/coinbase-deposit.png">
+</p>
 
 ### Nexo Deposit
 
 https://nexo.io
 
-![Nexo Deposit](./docs/images/nexo-deposit.png)
+<p align="center" width="100%">
+    <img width="33%" src="./docs/images/nexo-deposit.png">
+</p>
 
 Presenting your users with an address, like demonstrated, allows for the greatest flexibility when it comes to paying for whatever service you have to offer. Most of the common Joe, who hold crypto, will hold crypto in an exchange, and so presenting them with an address means they can simply copy the address, use their exchanges mechanism to send the funds. This process is usually a straightforward one and feels, to the user, like a normal bank payment. Without presenting your users with their own unique address to deposit, like the two above, you would only have one other option - Expect your users to interact with a decentralized application, this would require your users to use an unfamiliar tool such as metamask:
 
@@ -39,7 +43,9 @@ https://metamask.io/
 
 > Note that using Metamask as an example here is not shedding any bad light on it! Metamask is a great tool and helps users interact with decentralized applications with ease. The point that's being expressed is - Its different from what most users are used to and would require users to transferer funds to their Metamask wallet before interacting with your app thus using extra gas.
 
-![Metamask](./docs/images/metamask.png)
+<p align="center" width="100%">
+    <img width="33%" src="./docs/images/metamask.png">
+</p>
 
 Finally, this way of accepting payments means you can use the code in this project to easily implement a crypto currency payment gateway into your project without moving lots of your infrastructure onto the blockchain.
 
@@ -57,7 +63,9 @@ When a user creates an account, a message is placed onto the [Receiver Deploy Qu
 
 ### Deposits
 
-When the [Receiver Contract](./src/contracts/contracts/Receiver.sol) is deployed the user will be able to query for there deposit address and deposit funds. The [Watcher]() watches the `Transfer` logs for the [ERC20 USDT](https://tether.to/) token, reconciles the sender address to an associated Receiver contract and then is able to relate a deposit to a user, thus updating the users balance.
+When the [Receiver Contract](./src/contracts/contracts/Receiver.sol) is deployed the user will be able to query for there deposit address and deposit funds. The [Watcher](./src/watcher/index.js) watches the `Transfer` logs for the [ERC20 USDT](https://tether.to/) token, reconciles the sender address to an associated Receiver contract and then is able to relate a deposit to a user, thus updating the users balance.
+
+![Deposits](./docs/diagrams/deposit.drawio.svg)
 
 ### Withdrawals
 
