@@ -26,7 +26,7 @@ With the current blockchain ecosystem still lacking; adoption, age and technolog
 https://pro.coinbase.com/
 
 <p align="center" width="100%">
-    <img width="33%" src="./docs/images/coinbase-deposit.png">
+    <img width="50%" src="./docs/images/coinbase-deposit.png">
 </p>
 
 ### Nexo Deposit
@@ -34,7 +34,7 @@ https://pro.coinbase.com/
 https://nexo.io
 
 <p align="center" width="100%">
-    <img width="33%" src="./docs/images/nexo-deposit.png">
+    <img width="80%" src="./docs/images/nexo-deposit.png">
 </p>
 
 Presenting your users with an address, like demonstrated, allows for the greatest flexibility when it comes to paying for whatever service you have to offer. Most of the common Joe, who hold crypto, will hold crypto in an exchange, and so presenting them with an address means they can simply copy the address, use their exchanges mechanism to send the funds. This process is usually a straightforward one and feels, to the user, like a normal bank payment. Without presenting your users with their own unique address to deposit, like the two above, you would only have one other option - Expect your users to interact with a decentralized application, this would require your users to use an unfamiliar tool such as metamask:
@@ -44,7 +44,7 @@ https://metamask.io/
 > Note that using Metamask as an example here is not shedding any bad light on it! Metamask is a great tool and helps users interact with decentralized applications with ease. The point that's being expressed is - Its different from what most users are used to and would require users to transferer funds to their Metamask wallet before interacting with your app thus using extra gas.
 
 <p align="center" width="100%">
-    <img width="33%" src="./docs/images/metamask.png">
+    <img width="50%" src="./docs/images/metamask.png">
 </p>
 
 Finally, this way of accepting payments means you can use the code in this project to easily implement a crypto currency payment gateway into your project without moving lots of your infrastructure onto the blockchain.
