@@ -6,28 +6,30 @@ const createJWT = require("../../src/utils/create-jwt");
 const faker = require("faker");
 
 describe("/me", () => {
-  test("throw 401 if no header", async () => {
-    const response = await request(app).get("/me");
+  describe("authenticateRequest", () => {
+    test("throw 401 if no header", async () => {
+      const response = await request(app).get("/me");
 
-    expect(response.statusCode).to.equal(401);
-  });
+      expect(response.statusCode).to.equal(401);
+    });
 
-  test("throw 401 if no header token", async () => {
-    const response = await request(app)
-      .get("/me")
-      .set({ authorization: "Invalid djkldjlkdj" });
+    test("throw 401 if no header token", async () => {
+      const response = await request(app)
+        .get("/me")
+        .set({ authorization: "Invalid djkldjlkdj" });
 
-    expect(response.statusCode).to.equal(401);
-  });
+      expect(response.statusCode).to.equal(401);
+    });
 
-  test("throw 403 if no user found", async () => {
-    const token = await createJWT({ sub: "ahjkdhjkdhjkd" });
+    test("throw 403 if no user found", async () => {
+      const token = await createJWT({ sub: "ahjkdhjkdhjkd" });
 
-    const response = await request(app)
-      .get("/me")
-      .set({ authorization: `Bearer ${token}` });
+      const response = await request(app)
+        .get("/me")
+        .set({ authorization: `Bearer ${token}` });
 
-    expect(response.statusCode).to.equal(403);
+      expect(response.statusCode).to.equal(403);
+    });
   });
 
   test("should return user", async () => {

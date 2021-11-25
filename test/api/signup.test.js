@@ -12,6 +12,7 @@ describe("/signup", () => {
       [
         { email: faker.internet.email() },
         { password: faker.internet.password() },
+        {},
       ].map(async (data) => {
         const response = await request(app).post("/signup").send(data);
         expect(response.statusCode).to.equal(400);

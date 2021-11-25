@@ -9,10 +9,23 @@ const typeDefs = `
       createdAt: DateTime @timestamp
       receiver: Receiver @relationship(type: "HAS_RECEIVER", direction: OUT)
       deposits: [Deposit] @relationship(type: "HAS_DEPOSIT", direction: OUT)
+      withdrawals: [Withdrawal] @relationship(type: "HAS_WITHDRAWAL", direction: OUT)
       balance: Int @cypher(statement: """
-        MATCH (this)-[:HAS_DEPOSIT]->(d:Deposit)
-        WITH sum(d.amount) AS balance
-        RETURN balance
+        CALL {
+          WITH this
+          MATCH (this)-[:HAS_DEPOSIT]->(d:Deposit)
+          WITH sum(d.amount) AS totalDeposit
+          RETURN totalDeposit AS totalDeposit
+        }
+        CALL {
+          WITH this
+          MATCH (this)-[:HAS_WITHDRAWAL]->(w:Withdrawal)
+          WHERE w.completed = true
+          WITH sum(w.amount) AS totalWithdrawal
+          RETURN totalWithdrawal AS totalWithdrawal
+        }
+
+        RETURN totalDeposit - totalWithdrawal
       """)
     }
 
@@ -47,6 +60,14 @@ const typeDefs = `
       transaction: Transaction! @relationship(type: "HAS_TRANSACTION", direction: OUT)
       receiver: Receiver! @relationship(type: "HAS_DEPOSIT", direction: IN)
     }
+
+    type Withdrawal {
+      id: ID! @id(autogenerate: true)
+      amount: Int!
+      completed: Boolean
+      transaction: Transaction @relationship(type: "HAS_TRANSACTION", direction: OUT)
+      receiver: Receiver @relationship(type: "HAS_WITHDRAWAL", direction: IN)
+    }
 `;
 
 const ogm = new OGM({
@@ -58,10 +79,12 @@ const User = ogm.model("User");
 const Receiver = ogm.model("Receiver");
 const Transaction = ogm.model("Transaction");
 const Bank = ogm.model("Bank");
+const Withdrawal = ogm.model("Withdrawal");
 
 module.exports = {
   User,
   Receiver,
   Transaction,
   Bank,
+  Withdrawal,
 };
