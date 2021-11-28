@@ -3,6 +3,7 @@ const { web3 } = require("../connections");
 const path = require("path");
 const solc = require("solc");
 const fs = require("fs");
+const config = require("../config");
 const findSolImports = require("./find-sol-imports");
 const contractsFolder = path.join(__dirname, "../", "contracts", "contracts");
 
@@ -56,7 +57,7 @@ async function deployBank({ signerPublicKey, signerPrivateKey }) {
   const bankTxSinged = await web3.client.eth.accounts.signTransaction(
     {
       data: bankTx.encodeABI(),
-      gas: 1400000,
+      gas: config.BANK_DEPLOY_GAS,
       nonce,
     },
     signerPrivateKey

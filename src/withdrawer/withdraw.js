@@ -64,7 +64,7 @@ function listener(job, done) {
         {
           to: erc20Instance.options.address,
           data: transfer.encodeABI(),
-          gas: 1400000, // TODO
+          gas: config.ERC20_TRANSFER_GAS,
         },
         config.TRANSACTION_SIGNER_PRIVATE_KEY
       );

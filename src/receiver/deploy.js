@@ -21,7 +21,7 @@ function listener(job, done) {
           {
             to: bank.address,
             data: createReceiver.encodeABI(),
-            gas: 1400000,
+            gas: config.RECEIVER_DEPLOY_GAS,
             nonce,
           },
           config.TRANSACTION_SIGNER_PRIVATE_KEY

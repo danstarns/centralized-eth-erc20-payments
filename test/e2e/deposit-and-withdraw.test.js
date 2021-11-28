@@ -96,7 +96,7 @@ describe("deposit and withdraw end to end test", () => {
         {
           to: usdtTransaction.receipt.contractAddress,
           data: transferToReceiver.encodeABI(),
-          gas: 1400000,
+          gas: config.ERC20_TRANSFER_GAS,
         },
         config.TRANSACTION_SIGNER_PRIVATE_KEY
       );
@@ -115,7 +115,7 @@ describe("deposit and withdraw end to end test", () => {
       {
         to: usdtTransaction.receipt.contractAddress,
         data: transferToBank.encodeABI(),
-        gas: 1400000,
+        gas: config.ERC20_TRANSFER_GAS,
       },
       config.TRANSACTION_SIGNER_PRIVATE_KEY
     );

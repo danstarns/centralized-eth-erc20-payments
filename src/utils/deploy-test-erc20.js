@@ -3,6 +3,7 @@ const { web3 } = require("../connections");
 const path = require("path");
 const solc = require("solc");
 const fs = require("fs");
+const config = require("../config");
 const findSolImports = require("./find-sol-imports");
 const contractsFolder = path.join(__dirname, "../", "contracts", "contracts");
 
@@ -48,7 +49,7 @@ async function deployTestErc20({ signerPublicKey, signerPrivateKey }) {
   const testERC20Signed = await web3.client.eth.accounts.signTransaction(
     {
       data: testERC20Tx.encodeABI(),
-      gas: 600000,
+      gas: config.TEST_ERC20_DEPLOY_GAS,
       nonce: nonce,
     },
     signerPrivateKey
