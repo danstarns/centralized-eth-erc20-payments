@@ -69,6 +69,8 @@ function listener(job, done) {
         config.TRANSACTION_SIGNER_PRIVATE_KEY
       );
 
+      const gasPrice = await web3.client.eth.getGasPrice();
+
       const transferReceipt = await web3.client.eth.sendSignedTransaction(
         transferSigned.rawTransaction
       );
@@ -76,6 +78,7 @@ function listener(job, done) {
       await withdrawn.addToQueue({
         withdrawal,
         transactionHash: transferReceipt.transactionHash,
+        gasPrice,
       });
 
       done();

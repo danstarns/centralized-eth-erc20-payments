@@ -63,6 +63,8 @@ async function deployBank({ signerPublicKey, signerPrivateKey }) {
     signerPrivateKey
   );
 
+  const gasPrice = await web3.client.eth.getGasPrice();
+
   const bankReceipt = await web3.client.eth.sendSignedTransaction(
     bankTxSinged.rawTransaction
   );
@@ -71,7 +73,7 @@ async function deployBank({ signerPublicKey, signerPrivateKey }) {
 
   debug("Completed");
 
-  return { receipt: bankReceipt, contract: bankInstance };
+  return { receipt: bankReceipt, contract: bankInstance, gasPrice };
 }
 
 module.exports = deployBank;

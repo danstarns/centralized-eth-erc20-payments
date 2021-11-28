@@ -44,6 +44,7 @@ const typeDefs = `
       blockNumber: Int!
       gasUsed: Int!
       cumulativeGasUsed: Int!
+      gasPrice: BigInt
     }
 
     type Bank {

@@ -25,6 +25,7 @@ const typeDefs = `
         RECEIVER_DEPLOY_GAS: Int!
         BANK_DEPLOY_GAS: Int!
         TEST_ERC20_DEPLOY_GAS: Int!
+        TRANSACTION_WAIT_TIME: Int!
     }
 `;
 
@@ -52,6 +53,7 @@ const {
   RECEIVER_DEPLOY_GAS,
   BANK_DEPLOY_GAS,
   TEST_ERC20_DEPLOY_GAS,
+  TRANSACTION_WAIT_TIME,
 } = envGQL({ typeDefs });
 
 module.exports = {
@@ -78,4 +80,5 @@ module.exports = {
   RECEIVER_DEPLOY_GAS,
   BANK_DEPLOY_GAS,
   TEST_ERC20_DEPLOY_GAS,
+  TRANSACTION_WAIT_TIME,
 };

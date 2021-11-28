@@ -27,6 +27,8 @@ function listener(job, done) {
           config.TRANSACTION_SIGNER_PRIVATE_KEY
         );
 
+      const gasPrice = await web3.client.eth.getGasPrice();
+
       const receipt = await web3.client.eth.sendSignedTransaction(
         createReceiverSigned.rawTransaction
       );
@@ -34,6 +36,7 @@ function listener(job, done) {
       await deployed.addToQueue({
         transactionHash: receipt.transactionHash,
         user,
+        gasPrice,
       });
       done();
     } catch (error) {

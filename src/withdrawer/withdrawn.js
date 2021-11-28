@@ -47,6 +47,7 @@ function listener(job, done) {
               blockNumber: transaction.blockNumber,
               gasUsed: transaction.gasUsed,
               cumulativeGasUsed: transaction.cumulativeGasUsed,
+              gasPrice: job.data.gasPrice,
             },
           },
         },
@@ -65,11 +66,12 @@ function listen() {
   redis.queues.Withdrawn.process(listener);
 }
 
-async function addToQueue({ withdrawal, transactionHash }) {
+async function addToQueue({ withdrawal, transactionHash, gasPrice }) {
   await redis.queues.Withdrawn.add(
     {
       withdrawal: { id: withdrawal.id },
       transactionHash,
+      gasPrice,
     },
     { attempts: 10, backoff: 60000 }
   );

@@ -55,6 +55,7 @@ function listener(job, done) {
                     blockNumber: transaction.blockNumber,
                     gasUsed: transaction.gasUsed,
                     cumulativeGasUsed: transaction.cumulativeGasUsed,
+                    gasPrice: job.data.gasPrice,
                   },
                 },
               },
@@ -82,11 +83,12 @@ function listen() {
   redis.queues.Deployed.process(listener);
 }
 
-async function addToQueue({ transactionHash, user }) {
+async function addToQueue({ transactionHash, user, gasPrice }) {
   await redis.queues.Deployed.add(
     {
       transactionHash,
       user: { id: user.id },
+      gasPrice,
     },
     { attempts: 10, backoff: 60000 }
   );

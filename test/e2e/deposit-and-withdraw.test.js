@@ -12,8 +12,6 @@ const faker = require("faker");
 const { expect } = require("chai");
 const { Bank, User } = require("../../src/models");
 
-const TRANSACTION_WAIT_TIME = 10000;
-
 describe("deposit and withdraw end to end test", () => {
   test("should sign up user, create a receiver and deposit into and then withdraw out of it", async () => {
     let user;
@@ -38,6 +36,7 @@ describe("deposit and withdraw end to end test", () => {
                 blockNumber: bankTransaction.receipt.blockNumber,
                 gasUsed: bankTransaction.receipt.gasUsed,
                 cumulativeGasUsed: bankTransaction.receipt.cumulativeGasUsed,
+                gasPrice: bankTransaction.gasPrice,
               },
             },
           },
@@ -66,7 +65,7 @@ describe("deposit and withdraw end to end test", () => {
     expect(signupResponse.statusCode).to.equal(200);
 
     // Wait for receiver to be deployed
-    await sleep(TRANSACTION_WAIT_TIME);
+    await sleep(config.TRANSACTION_WAIT_TIME);
 
     [user] = await User.find({
       where: { email },
@@ -124,7 +123,7 @@ describe("deposit and withdraw end to end test", () => {
       transferToBankSigned.rawTransaction
     );
 
-    await sleep(TRANSACTION_WAIT_TIME);
+    await sleep(config.TRANSACTION_WAIT_TIME);
 
     [user] = await User.find({
       where: { email },
@@ -173,7 +172,7 @@ describe("deposit and withdraw end to end test", () => {
     expect(withdrawalResponse.statusCode).to.equal(200);
 
     // Wait for transaction to happen
-    await sleep(TRANSACTION_WAIT_TIME * 2);
+    await sleep(config.TRANSACTION_WAIT_TIME * 2);
 
     [user] = await User.find({
       where: { email },
