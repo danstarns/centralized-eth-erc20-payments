@@ -13,4 +13,5 @@ function listen() {
 
 module.exports = {
   listen,
+  withdraw,
 };

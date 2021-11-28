@@ -1,4 +1,6 @@
-const { User } = require("../../models");
+const { User, Withdrawal } = require("../../models");
+const config = require("../../config");
+const withdrawer = require("../../withdrawer");
 
 async function withdraw(req, res) {
   const { amount, to } = req.body;
@@ -21,12 +23,21 @@ async function withdraw(req, res) {
     return res.status(400).send("insufficient funds");
   }
 
-  await User.update({
-    where: { id: user.id },
-    create: { withdrawals: [{ node: { amount, completed: false } }] },
+  const { withdrawals } = await Withdrawal.create({
+    input: [
+      {
+        amount,
+        completed: false,
+        to,
+        bank: { connect: { where: { node: { id: config.BANK_ID } } } },
+        user: { connect: { where: { node: { id: user.id } } } },
+      },
+    ],
   });
 
-  return res.send(200).end();
+  await withdrawer.withdraw.addToQueue({ withdrawal: withdrawals[0] });
+
+  return res.sendStatus(200).end();
 }
 
 module.exports = withdraw;

@@ -64,9 +64,11 @@ const typeDefs = `
     type Withdrawal {
       id: ID! @id(autogenerate: true)
       amount: Int!
+      to: String!
       completed: Boolean
       transaction: Transaction @relationship(type: "HAS_TRANSACTION", direction: OUT)
-      receiver: Receiver @relationship(type: "HAS_WITHDRAWAL", direction: IN)
+      user: User! @relationship(type: "HAS_WITHDRAWAL", direction: IN)
+      bank: Bank! @relationship(type: "HAS_WITHDRAWAL", direction: IN)
     }
 `;
 

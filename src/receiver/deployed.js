@@ -1,6 +1,5 @@
 const { redis, web3 } = require("../connections");
-const { User } = require("../models");
-const { Bank } = require("../models");
+const { User, Bank } = require("../models");
 const config = require("../config");
 
 function listener(job, done) {

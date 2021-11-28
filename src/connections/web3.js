@@ -19,9 +19,7 @@ const BankABI = require(path.resolve(
 const erc20ABI = require("@openzeppelin/contracts/build/contracts/ERC20.json");
 
 function getBankContract(address) {
-  const bank = new client.eth.Contract(BankABI.abi, address);
-
-  return bank;
+  return new client.eth.Contract(BankABI.abi, address);
 }
 
 function getUSDTContract() {

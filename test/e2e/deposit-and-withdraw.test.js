@@ -12,8 +12,10 @@ const faker = require("faker");
 const { expect } = require("chai");
 const { Bank, User } = require("../../src/models");
 
-describe("deposit end to end test", () => {
-  test("should sign up user, create a receiver and deposit into", async () => {
+const TRANSACTION_WAIT_TIME = 10000;
+
+describe("deposit and withdraw end to end test", () => {
+  test("should sign up user, create a receiver and deposit into and then withdraw out of it", async () => {
     let user;
 
     await connect();
@@ -52,17 +54,19 @@ describe("deposit end to end test", () => {
     config.USDT_ADDRESS = usdtTransaction.receipt.contractAddress;
     require("../../src/receiver").listen();
     require("../../src/watcher").watch();
+    require("../../src/withdrawer").listen();
 
     const email = faker.internet.email();
     const password = faker.internet.password();
 
-    await request(app).post("/signup").send({
+    const signupResponse = await request(app).post("/signup").send({
       email,
       password,
     });
+    expect(signupResponse.statusCode).to.equal(200);
 
     // Wait for receiver to be deployed
-    await sleep(30000);
+    await sleep(TRANSACTION_WAIT_TIME);
 
     [user] = await User.find({
       where: { email },
@@ -82,30 +86,45 @@ describe("deposit end to end test", () => {
     expect(receiverAddress).to.not.equal(null);
     expect(receiverAddress).to.not.equal(undefined);
 
-    const transfer = usdtTransaction.contract.methods.transfer(
+    const transferToReceiver = usdtTransaction.contract.methods.transfer(
       receiverAddress,
       100
     );
 
-    const nonce = await web3.client.eth.getTransactionCount(
-      TRANSACTION_SIGNER_PUBLIC_KEY
+    const transferToReceiverSigned =
+      await web3.client.eth.accounts.signTransaction(
+        {
+          to: usdtTransaction.receipt.contractAddress,
+          data: transferToReceiver.encodeABI(),
+          gas: 1400000,
+        },
+        config.TRANSACTION_SIGNER_PRIVATE_KEY
+      );
+
+    const transferToReceiverReceipt =
+      await web3.client.eth.sendSignedTransaction(
+        transferToReceiverSigned.rawTransaction
+      );
+
+    const transferToBank = usdtTransaction.contract.methods.transfer(
+      banks[0].address,
+      100
     );
 
-    const transferSigned = await web3.client.eth.accounts.signTransaction(
+    const transferToBankSigned = await web3.client.eth.accounts.signTransaction(
       {
         to: usdtTransaction.receipt.contractAddress,
-        data: transfer.encodeABI(),
+        data: transferToBank.encodeABI(),
         gas: 1400000,
-        nonce,
       },
       config.TRANSACTION_SIGNER_PRIVATE_KEY
     );
 
-    const transferReceipt = await web3.client.eth.sendSignedTransaction(
-      transferSigned.rawTransaction
+    await web3.client.eth.sendSignedTransaction(
+      transferToBankSigned.rawTransaction
     );
 
-    await sleep(30000);
+    await sleep(TRANSACTION_WAIT_TIME);
 
     [user] = await User.find({
       where: { email },
@@ -132,9 +151,55 @@ describe("deposit end to end test", () => {
     expect(user.deposits[0].amount).to.equal(100);
     expect(user.deposits.length).to.equal(1);
     expect(user.deposits[0].transaction.transactionHash).to.equal(
-      transferReceipt.transactionHash
+      transferToReceiverReceipt.transactionHash
     );
     expect(user.deposits[0].receiver.address).to.equal(receiverAddress);
     expect(user.deposits[0].receiver.bank.id).to.equal(banks[0].id);
+
+    const withdrawalTo = faker.finance.ethereumAddress();
+
+    // Withdrawal
+    const withdrawalResponse = await request(app)
+      .post("/withdraw")
+      .send({
+        email,
+        password,
+      })
+      .set({ authorization: `Bearer ${signupResponse.body.jwt}` })
+      .send({
+        amount: user.deposits[0].amount,
+        to: withdrawalTo,
+      });
+    expect(withdrawalResponse.statusCode).to.equal(200);
+
+    // Wait for transaction to happen
+    await sleep(TRANSACTION_WAIT_TIME * 2);
+
+    [user] = await User.find({
+      where: { email },
+      selectionSet: `
+        {
+          balance
+          withdrawals {
+            to
+            amount
+            bank {
+              id
+            }
+          }
+        }
+      `,
+    });
+
+    expect(user.balance).to.equal(0);
+    expect(user.withdrawals.length).to.equal(1);
+    expect(user.withdrawals[0].amount).to.equal(100);
+    expect(user.withdrawals[0].bank.id).to.equal(banks[0].id);
+
+    expect(
+      Number(
+        await usdtTransaction.contract.methods.balanceOf(withdrawalTo).call()
+      )
+    ).to.equal(user.withdrawals[0].amount);
   });
 });
