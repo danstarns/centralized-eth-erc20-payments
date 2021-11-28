@@ -114,7 +114,7 @@ npm run docker-test
 
 ### Against Rinkeby
 
-The [e2e](./test/e2e/deposit-and-withdraw.test.js) tests gave successfully ran against the [Rinkeby test network](https://www.rinkeby.io/#stats). The acting address was (0x06e7Ee711cD2343602d1f767763Fab2eFD66d995)[https://rinkeby.etherscan.io/address/0x06e7ee711cd2343602d1f767763fab2efd66d995].
+The [e2e](./test/e2e/deposit-and-withdraw.test.js) tests gave successfully ran against the [Rinkeby test network](https://www.rinkeby.io/#stats). The acting address was [0x06e7Ee711cD2343602d1f767763Fab2eFD66d995](https://rinkeby.etherscan.io/address/0x06e7ee711cd2343602d1f767763fab2efd66d995).
 
 ![Rinkeby Tests](./docs/images/rinkeby-tests.png)
 
