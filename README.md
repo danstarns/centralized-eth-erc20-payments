@@ -96,7 +96,7 @@ This project uses the following:
 
 High level overview of whats stored in [Neo4j](https://neo4j.com/):
 
-![Data Model](./docs/images/data-model.svg)
+![Data Model](./docs/images/eth-erc20.png)
 
 ## Development
 
