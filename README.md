@@ -65,7 +65,9 @@ When a user creates an account, a message is placed onto the [Receiver Deploy Qu
 
 When the [Receiver Contract](./src/contracts/contracts/Receiver.sol) is deployed the user will be able to query for there deposit address and deposit funds. The [Watcher](./src/watcher/index.js) watches the `Transfer` logs for the [ERC20 USDT](https://tether.to/) token, reconciles the sender address to an associated Receiver contract and then is able to relate a deposit to a user, thus updating the users balance.
 
-![Deposits](./docs/diagrams/deposit.drawio.svg)
+<p align="center" width="100%">
+    <img width="80%" src="./docs/diagrams/deposit.drawio.svg">
+</p>
 
 ### Withdrawals
 
