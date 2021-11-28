@@ -71,6 +71,8 @@ When the [Receiver Contract](./src/contracts/contracts/Receiver.sol) is deployed
 
 When a user requests a withdrawal a 'Withdrawal Request' is placed on the [Withdraw Queue](./src/withdraw/withdrawn.js) queue. On withdraw transaction receipt another message is placed on the [Withdrawn Queue](./src/withdrawer/withdrawn.js) where the listener will watch and wait for the confirmation of the withdraw transaction. On transaction success, the listener shall append a deposit against the User.
 
+![Withdrawals](./docs/diagrams/withdrawal.drawio.svg)
+
 ## Modules
 
 The server consists of following modules:
