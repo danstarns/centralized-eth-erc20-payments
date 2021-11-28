@@ -71,7 +71,7 @@ When the [Receiver Contract](./src/contracts/contracts/Receiver.sol) is deployed
 
 When a user requests a withdrawal a 'Withdrawal Request' is placed on the [Withdraw Queue](./src/withdraw/withdrawn.js) queue. On withdraw transaction receipt another message is placed on the [Withdrawn Queue](./src/withdrawer/withdrawn.js) where the listener will watch and wait for the confirmation of the withdraw transaction. On transaction success, the listener shall append a deposit against the User.
 
-> This method of withdrawals means that you owner will be paying gas each time a withdrawal happens, you may, for example, want to deduct some tokens from your user on withdrawal to maintain profitability.
+> This method of withdrawals means that you, the owner, will be paying gas each time a withdrawal happens, you may, for example, want to deduct some tokens from your user on withdrawal to maintain profitability - this is not in this implementation.
 
 ![Withdrawals](./docs/diagrams/withdrawal.drawio.svg)
 
@@ -230,6 +230,14 @@ And returned the following data:
   }
 }
 ```
+
+## Disclaimer
+
+This project is under MIT license and you are free to copy, fork and modify it - You can also contribute ❤
+
+The contracts used in this project haven't been audited!
+
+The the entire stack has not been used on Ethereum mainnet.
 
 ## License
 
