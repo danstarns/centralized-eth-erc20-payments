@@ -6,8 +6,6 @@ Centralized Ethereum ERC20 Payment Processor
 
 Ever wondered how crypto exchanges manage deposits and withdrawals ? This project aims to demonstrate how to do user management, handle deposits and withdrawals plus keep track of each users balance in a centralized store.
 
-~~This project is part of a case study, you can read the case study [here](https://medium.com/@danstarns/handling-ethereum-erc20-deposits-and-withdrawals-like-an-exchange-a-case-study-256fe6602a7a).~~ - Work in progress 🏗
-
 ## Why centralized ?
 
 This is a great question! The movement of blockchain is all about decentralization, transparency and accountability and thus putting the term 'centralized' in here seems to negate the incentives. However, there are many use cases to centrally keep track of a 'Users Balance' and the first, for example, is an exchange - Users deposit funds and then use the funds to buy and sell, this is of course talking about a centralized exchange. Then you have centralized investment accounts such as; [Nexo](https://nexo.io) & [Celsius](https://celsius.network/). Another example is if you were to make a game and accept a deposit of crypto to 'Top Up' a users virtual balance. Finally, you might be [Tesla](https://www.tesla.com/en_gb) and wanting to accept crypto payments.
@@ -73,6 +71,8 @@ When the [Receiver Contract](./src/contracts/contracts/Receiver.sol) is deployed
 
 When a user requests a withdrawal a 'Withdrawal Request' is placed on the [Withdraw Queue](./src/withdraw/withdrawn.js) queue. On withdraw transaction receipt another message is placed on the [Withdrawn Queue](./src/withdrawer/withdrawn.js) where the listener will watch and wait for the confirmation of the withdraw transaction. On transaction success, the listener shall append a deposit against the User.
 
+> This method of withdrawals means that you owner will be paying gas each time a withdrawal happens, you may, for example, want to deduct some tokens from your user on withdrawal to maintain profitability.
+
 ![Withdrawals](./docs/diagrams/withdrawal.drawio.svg)
 
 ## Modules
@@ -81,8 +81,8 @@ The server consists of following modules:
 
 1. [API](./src/api) - User facing REST, handles account creation and withdrawal requests.
 2. [Receiver](./src/receiver) - Listens for account creation and deploys the [Receiver Contract](./src/contracts/contracts/Receiver.sol) and associates the deployed contract with the new User.
-3. [Withdrawer]() - Listens for withdrawal requests and facilitates the transaction.
-4. [Watcher]() - Watches the [USDT Transfer](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC20/IERC20.sol#L75) logs and records a deposit if the 'to' address is one belonging to a User.
+3. [Withdrawer](./src/watcher) - Listens for withdrawal requests and facilitates the transaction.
+4. [Watcher](./src/watcher) - Watches the [USDT Transfer](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC20/IERC20.sol#L75) logs and records a deposit if the 'to' address is one belonging to a User.
 
 ## Dependencies
 
